@@ -21,7 +21,7 @@ void Window::Initialize(std::function<void(Window* window)> OnInit, std::functio
 	running = true;
 
 	window = nullptr;
-	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Game", 200, 200, 1920, 1080, SDL_WINDOW_SHOWN);
 	
 	if(window == nullptr)
 	{
@@ -54,6 +54,16 @@ void Window::Run()
 	}
 
 	destruction(this);
+}
+
+void Window::SetFullscreen(Uint32 flag)
+{
+	SDL_SetWindowFullscreen(window, flag);
+}
+
+SDL_Renderer* Window::GetRenderer()
+{
+	return renderer;
 }
 
 void Window::Quit()

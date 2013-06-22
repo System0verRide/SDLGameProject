@@ -53,6 +53,10 @@ public:
 	void AddEventCallback(EventCallback event);
 	void RemoveEventCallback(EventCallback event);
 
+	void SetFullscreen(Uint32 flag);
+
+	SDL_Renderer* GetRenderer();
+
 	std::string GetLastError();
 
 private:
