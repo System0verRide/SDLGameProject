@@ -1,33 +1,10 @@
 #include "Window.h"
 
+int EventCallback::refcount = 0;
 
-Window::Window(const char* title)
+Window::Window()
 {
-	running = true;
 
-	window = nullptr;
-	SDL_CreateWindow(title, 0, 0, 640, 480, SDL_WINDOW_SHOWN);
-	
-	if(window == nullptr)
-	{
-		running = false;
-	}
-
-	renderer = nullptr;
-	SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-	if(renderer == nullptr)
-	{
-		running = false;
-	}
-
-	init();
-	
-	while(running)
-	{
-		pollEventSystem();
-		frame();
-	}
 }
 
 Window::Window(const Window& other)
@@ -37,6 +14,51 @@ Window::Window(const Window& other)
 
 Window::~Window(void)
 {
+}
+
+void Window::Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction)
+{
+	running = true;
+
+	window = nullptr;
+	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_SHOWN);
+	
+	if(window == nullptr)
+	{
+		running = false;
+		error.push_back("Window creation has failed...");
+	}
+
+	renderer = nullptr;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	if(renderer == nullptr)
+	{
+		running = false;
+		error.push_back("Could not create a valid render context");
+	}
+
+	init = OnInit;
+	frame = OnFrame;
+	destruction = OnDestruction;
+}
+
+void Window::Run()
+{
+	init(this);
+
+	while(running)
+	{
+		pollEventSystem();
+		frame(this);
+	}
+
+	destruction(this);
+}
+
+void Window::Quit()
+{
+	running = false;
 }
 
 void Window::AddEventCallback(EventCallback event)
@@ -58,6 +80,11 @@ void Window::RemoveEventCallback(EventCallback event)
 	}
 }
 
+std::string Window::GetLastError()
+{
+	return error.back();
+}
+
 
 void Window::pollEventSystem()
 {
@@ -73,15 +100,10 @@ void Window::dispatchEvent(SDL_Event e)
 	{
 		for(unsigned int i = 0; i < registeredEvents.size(); i++)
 		{
-			if(registeredEvents.at(i).e.type == e.type)
+			if(registeredEvents.at(i).e == e.type)
 			{
 				registeredEvents.at(i).Dispatch(e);
 			}
 		}
 	}
-}
-
-void Window::frame()
-{
-
 }
