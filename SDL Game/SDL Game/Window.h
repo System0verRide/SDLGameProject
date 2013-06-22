@@ -3,11 +3,13 @@
 #include <functional>
 #include <vector>
 
+
+
 class EventCallback
 {
 	//Function pointers to member functions must use std::bind
 public:
-	EventCallback(SDL_Event event, std::function<void(SDL_Event)> functor)
+	EventCallback(SDL_EventType event, std::function<void(SDL_Event)> functor)
 	{
 		e = event;
 		f = functor;
@@ -27,7 +29,7 @@ public:
 	}
 
 public:
-	SDL_Event e;
+	SDL_EventType e;
 
 private:
 	std::function<void(SDL_Event e)> f;
@@ -38,25 +40,33 @@ private:
 class Window
 {
 public:
-	Window(const char* title);
+	Window();
 	Window(const Window& other);
 	~Window(void);
 
 public:
-	void Initialize();
+	void Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction);
 	void Quit();
+
+	void Run();
 
 	void AddEventCallback(EventCallback event);
 	void RemoveEventCallback(EventCallback event);
 
+	std::string GetLastError();
+
 private:
 	void pollEventSystem();
 	void dispatchEvent(SDL_Event e);
-	void frame();
 
 private:
 	std::vector<EventCallback> registeredEvents;
+	std::vector<std::string> error;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running;
+
+	std::function<void(Window* window)> init;
+	std::function<void(Window* window)> frame;
+	std::function<void(Window* window)> destruction;
 };
