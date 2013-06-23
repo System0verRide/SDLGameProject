@@ -3,74 +3,83 @@
 #include <functional>
 #include <vector>
 
-
-
-class EventCallback
+namespace Game
 {
-	//Function pointers to member functions must use std::bind
-public:
-	EventCallback(SDL_EventType event, std::function<void(SDL_Event)> functor)
+
+	class EventCallback
 	{
-		e = event;
-		f = functor;
-		refcount++;
-		UUID = refcount;
-	}
+		//Function pointers to member functions must use std::bind
+	public:
+		EventCallback(SDL_EventType event, std::function<void(SDL_Event)> functor)
+		{
+			e = event;
+			f = functor;
+			refcount++;
+			UUID = refcount;
+		}
 
-public:
-	int GetUUID()
+	public:
+		int GetUUID()
+		{
+			return UUID;
+		}
+
+		void Dispatch(SDL_Event e)
+		{
+			f(e);
+		}
+
+	public:
+		SDL_EventType e;
+
+	private:
+		std::function<void(SDL_Event e)> f;
+		int UUID;
+		static int refcount;
+	};
+
+	class Window
 	{
-		return UUID;
-	}
+	public:
+		Window();
+		Window(const Window& other);
+		~Window(void);
 
-	void Dispatch(SDL_Event e)
-	{
-		f(e);
-	}
+	public:
+		void Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction);
+		void Quit();
 
-public:
-	SDL_EventType e;
+		void Run();
 
-private:
-	std::function<void(SDL_Event e)> f;
-	int UUID;
-	static int refcount;
-};
+		void AddEventCallback(EventCallback event);
+		void RemoveEventCallback(EventCallback event);
 
-class Window
-{
-public:
-	Window();
-	Window(const Window& other);
-	~Window(void);
+		void SetFullscreen(Uint32 flag);
 
-public:
-	void Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction);
-	void Quit();
+		SDL_Renderer* GetRenderer();
 
-	void Run();
+		std::string GetLastError();
 
-	void AddEventCallback(EventCallback event);
-	void RemoveEventCallback(EventCallback event);
+	private:
+		void pollEventSystem();
+		void dispatchEvent(SDL_Event e);
 
-	void SetFullscreen(Uint32 flag);
+	private:
+		std::vector<EventCallback> registeredEvents;
+		std::vector<std::string> error;
+		SDL_Window* window;
+		SDL_Renderer* renderer;
+		bool running;
 
-	SDL_Renderer* GetRenderer();
+		/*
+		std::fuctions (callbacks) for initialization, frame, and, destruction.
+		Initialization called once on window creation.
+		Frame called every frame.
+		Destruction is called once before the destruction of the window.
+		*/
+		std::function<void(Window* window)> init;
+		std::function<void(Window* window)> frame;
+		std::function<void(Window* window)> destruction;
+	};
 
-	std::string GetLastError();
-
-private:
-	void pollEventSystem();
-	void dispatchEvent(SDL_Event e);
-
-private:
-	std::vector<EventCallback> registeredEvents;
-	std::vector<std::string> error;
-	SDL_Window* window;
-	SDL_Renderer* renderer;
-	bool running;
-
-	std::function<void(Window* window)> init;
-	std::function<void(Window* window)> frame;
-	std::function<void(Window* window)> destruction;
 };

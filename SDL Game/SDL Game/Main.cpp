@@ -16,7 +16,6 @@ void Initialize(Window* window)
 {
 	EventCallback OnQuit(SDL_QUIT, OnQuit);
 	window->AddEventCallback(OnQuit);
-	window->SetFullscreen(SDL_WINDOW_FULLSCREEN);
 }
 
 void Frame(Window* window)
@@ -24,7 +23,7 @@ void Frame(Window* window)
 	SDL_SetRenderDrawColor(window->GetRenderer(), rand()%255, rand()%255, rand()%255, 255);
 	SDL_RenderClear(window->GetRenderer());
 	SDL_RenderPresent(window->GetRenderer());
-	SDL_Delay(10);
+	SDL_Delay(353);
 }
 
 void Destruction(Window* window)
