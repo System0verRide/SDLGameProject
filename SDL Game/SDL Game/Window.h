@@ -46,7 +46,7 @@ namespace Game
 		~Window(void);
 
 	public:
-		void Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction);
+		void Initialize(std::function<void()> OnInit, std::function<void()> OnFrame, std::function<void()> OnDestruction);
 		void Quit();
 
 		void Run();
@@ -77,9 +77,9 @@ namespace Game
 		Frame called every frame.
 		Destruction is called once before the destruction of the window.
 		*/
-		std::function<void(Window* window)> init;
-		std::function<void(Window* window)> frame;
-		std::function<void(Window* window)> destruction;
+		std::function<void()> init;
+		std::function<void()> frame;
+		std::function<void()> destruction;
 	};
 
 };

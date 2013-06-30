@@ -1,27 +1,27 @@
 #include "Window.h"
 
-int EventCallback::refcount = 0;
+int Game::EventCallback::refcount = 0;
 
-Window::Window()
+Game::Window::Window()
 {
 
 }
 
-Window::Window(const Window& other)
+Game::Window::Window(const Window& other)
 {
 
 }
 
-Window::~Window(void)
+Game::Window::~Window(void)
 {
 }
 
-void Window::Initialize(std::function<void(Window* window)> OnInit, std::function<void(Window* window)> OnFrame, std::function<void(Window* window)> OnDestruction)
+void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()> OnFrame, std::function<void()> OnDestruction)
 {
 	running = true;
 
 	window = nullptr;
-	window = SDL_CreateWindow("Game", 200, 200, 1920, 1080, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_SHOWN);
 	
 	if(window == nullptr)
 	{
@@ -43,40 +43,42 @@ void Window::Initialize(std::function<void(Window* window)> OnInit, std::functio
 	destruction = OnDestruction;
 }
 
-void Window::Run()
+void Game::Window::Run()
 {
-	init(this);
+	init();
 
 	while(running)
 	{
 		pollEventSystem();
-		frame(this);
+		frame();
 	}
 
-	destruction(this);
+	destruction();
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 }
 
-void Window::SetFullscreen(Uint32 flag)
+void Game::Window::SetFullscreen(Uint32 flag)
 {
 	SDL_SetWindowFullscreen(window, flag);
 }
 
-SDL_Renderer* Window::GetRenderer()
+SDL_Renderer* Game::Window::GetRenderer()
 {
 	return renderer;
 }
 
-void Window::Quit()
+void Game::Window::Quit()
 {
 	running = false;
 }
 
-void Window::AddEventCallback(EventCallback event)
+void Game::Window::AddEventCallback(EventCallback event)
 {
 	registeredEvents.push_back(event);
 }
 
-void Window::RemoveEventCallback(EventCallback event)
+void Game::Window::RemoveEventCallback(EventCallback event)
 {
 	std::vector<EventCallback>::iterator it = registeredEvents.begin();
 	for(unsigned int i = 0; i < registeredEvents.size(); i++)
@@ -90,21 +92,23 @@ void Window::RemoveEventCallback(EventCallback event)
 	}
 }
 
-std::string Window::GetLastError()
+std::string Game::Window::GetLastError()
 {
 	return error.back();
 }
 
 
-void Window::pollEventSystem()
+void Game::Window::pollEventSystem()
 {
 	SDL_Event e;
 
-	SDL_PollEvent(&e);
-	dispatchEvent(e);
+	while(SDL_PollEvent(&e))
+	{
+		dispatchEvent(e);
+	}
 }
 
-void Window::dispatchEvent(SDL_Event e)
+void Game::Window::dispatchEvent(SDL_Event e)
 {
 	if(!registeredEvents.empty())
 	{
