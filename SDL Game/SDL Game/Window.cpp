@@ -29,6 +29,18 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 		error.push_back("Window creation has failed...");
 	}
 
+	/*
+	OpenGL 4.0 Context Creation
+	*/
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+
+	context = SDL_GL_CreateContext(window);
+
+	gl::sys::LoadFunctions();
+
+	/*
 	renderer = nullptr;
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
@@ -37,6 +49,7 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 		running = false;
 		error.push_back("Could not create a valid render context");
 	}
+	*/
 
 	init = OnInit;
 	frame = OnFrame;
@@ -105,6 +118,7 @@ void Game::Window::pollEventSystem()
 	while(SDL_PollEvent(&e))
 	{
 		dispatchEvent(e);
+		
 	}
 }
 

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <functional>
 #include <vector>
+#include "gl_core_4_0.hpp"
 
 namespace Game
 {
@@ -69,6 +70,7 @@ namespace Game
 		std::vector<std::string> error;
 		SDL_Window* window;
 		SDL_Renderer* renderer;
+		SDL_GLContext context;
 		bool running;
 
 		/*
