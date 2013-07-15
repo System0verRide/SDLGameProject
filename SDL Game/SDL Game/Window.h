@@ -2,7 +2,8 @@
 #include <SDL.h>
 #include <functional>
 #include <vector>
-#include "gl_core_4_0.hpp"
+#include <iostream>
+#include <GL\glew.h>
 
 namespace Game
 {
@@ -57,7 +58,7 @@ namespace Game
 
 		void SetFullscreen(Uint32 flag);
 
-		SDL_Renderer* GetRenderer();
+		SDL_Window* GetWindow();
 
 		std::string GetLastError();
 
@@ -69,7 +70,6 @@ namespace Game
 		std::vector<EventCallback> registeredEvents;
 		std::vector<std::string> error;
 		SDL_Window* window;
-		SDL_Renderer* renderer;
 		SDL_GLContext context;
 		bool running;
 

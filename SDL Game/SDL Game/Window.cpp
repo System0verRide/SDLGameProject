@@ -21,7 +21,7 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	running = true;
 
 	window = nullptr;
-	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN);
 	
 	if(window == nullptr)
 	{
@@ -38,7 +38,10 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 
 	context = SDL_GL_CreateContext(window);
 
-	gl::sys::LoadFunctions();
+	if(glewInit() != GLEW_OK)
+	{
+		const GLubyte* blah = glewGetErrorString(GLEW_VERSION);
+	}
 
 	/*
 	renderer = nullptr;
@@ -67,7 +70,6 @@ void Game::Window::Run()
 	}
 
 	destruction();
-	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 }
 
@@ -76,9 +78,9 @@ void Game::Window::SetFullscreen(Uint32 flag)
 	SDL_SetWindowFullscreen(window, flag);
 }
 
-SDL_Renderer* Game::Window::GetRenderer()
+SDL_Window* Game::Window::GetWindow()
 {
-	return renderer;
+	return window;
 }
 
 void Game::Window::Quit()

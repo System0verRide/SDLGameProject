@@ -24,5 +24,6 @@ private:
 	void OnQuit(SDL_Event e);
 	void OnKeyDown(SDL_Event e);
 	void OnKeyUp(SDL_Event e);
+
 };
 

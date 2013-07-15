@@ -22,10 +22,11 @@ void Framework::Initialize()
 	Game::EventCallback OnQuitCallback = Game::EventCallback(SDL_QUIT, std::bind(&Framework::OnQuit, this, std::placeholders::_1));
 	Game::EventCallback OnKeyDownCallback = Game::EventCallback(SDL_KEYDOWN, std::bind(&Framework::OnKeyDown, this, std::placeholders::_1));
 	Game::EventCallback OnKeyUpCallback = Game::EventCallback(SDL_KEYUP, std::bind(&Framework::OnKeyUp, this, std::placeholders::_1));
-
 	Window->AddEventCallback(OnQuitCallback);
 	Window->AddEventCallback(OnKeyDownCallback);
 	Window->AddEventCallback(OnKeyUpCallback);
+
+	glClearColor(0.3f, 0.4f, 0.5f, 1.0f);
 }
 
 void Framework::Start()
@@ -36,8 +37,9 @@ void Framework::Start()
 
 void Framework::Frame()
 {
-	SDL_RenderClear(Window->GetRenderer());
-	SDL_RenderPresent(Window->GetRenderer());
+	glViewport(0, 0, 640, 480);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(Window->GetWindow());
 }
 
 void Framework::Destruction()
