@@ -1,5 +1,9 @@
 #pragma once
 #include <functional>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include "Atmosphere.h"
+#include "Shader.h"
 #include "Window.h"
 
 class Framework
@@ -14,6 +18,15 @@ public:
 
 private:
 	Game::Window* Window;
+	Atmosphere* theAtmosphere;
+	Shader* atmosphereShader;
+
+	glm::mat4 projectionMatrix;
+	glm::mat4 viewMatrix;
+	glm::mat4 worldMatrix;
+	glm::mat4 worldViewProjectionMatrix;
+
+	int worldViewProjectionMatrixLoc;
 
 private:
 	void Initialize();

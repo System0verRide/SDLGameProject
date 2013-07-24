@@ -27,6 +27,22 @@ void Framework::Initialize()
 	Window->AddEventCallback(OnKeyUpCallback);
 
 	glClearColor(0.3f, 0.4f, 0.5f, 1.0f);
+	theAtmosphere = new Atmosphere();
+	theAtmosphere->Init();
+	atmosphereShader = new Shader();
+	atmosphereShader->Init("vert.vert", "frag.frag");
+
+	projectionMatrix = glm::perspective(60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+	viewMatrix = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	worldViewProjectionMatrix = worldMatrix * viewMatrix * projectionMatrix;
+
+	//Uniform locations
+
+	atmosphereShader->Bind();
+	worldViewProjectionMatrixLoc = glGetUniformLocation(atmosphereShader->Id(), "worldViewProjectionMatrix");
+
+	glUniformMatrix4fv(worldViewProjectionMatrixLoc, 1, GL_FALSE, &worldViewProjectionMatrix[0][0]);
+	atmosphereShader->Unbind();
 }
 
 void Framework::Start()
@@ -37,14 +53,18 @@ void Framework::Start()
 
 void Framework::Frame()
 {
-	glViewport(0, 0, 640, 480);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(0, 0, 800, 600);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	atmosphereShader->Bind();
+	theAtmosphere->Draw();
+	atmosphereShader->Unbind();
 	SDL_GL_SwapWindow(Window->GetWindow());
 }
 
 void Framework::Destruction()
 {
-
+	theAtmosphere->Destroy();
+	delete theAtmosphere;
 }
 
 void Framework::OnQuit(SDL_Event e)

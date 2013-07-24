@@ -21,7 +21,7 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	running = true;
 
 	window = nullptr;
-	window = SDL_CreateWindow("Game", 200, 200, 640, 480, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Game", 200, 200, 800, 600, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN);
 	
 	if(window == nullptr)
 	{
@@ -36,23 +36,27 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
+	glewExperimental = GL_TRUE;
 	context = SDL_GL_CreateContext(window);
 
 	if(glewInit() != GLEW_OK)
 	{
 		const GLubyte* blah = glewGetErrorString(GLEW_VERSION);
 	}
+	int major;
+	int minor;
 
-	/*
-	renderer = nullptr;
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	glGetIntegerv(GL_MAJOR_VERSION, &major);
+	glGetIntegerv(GL_MINOR_VERSION, &minor);
 
-	if(renderer == nullptr)
+	GLenum blah = glGetError();
+
+	if(major != 4 && minor != 0)
 	{
-		running = false;
-		error.push_back("Could not create a valid render context");
+		//we have problems
 	}
-	*/
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
 	init = OnInit;
 	frame = OnFrame;
@@ -70,6 +74,7 @@ void Game::Window::Run()
 	}
 
 	destruction();
+	SDL_GL_DeleteContext(context);
 	SDL_DestroyWindow(window);
 }
 
