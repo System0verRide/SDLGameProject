@@ -5,6 +5,7 @@
 #include <map>
 #include <math.h>
 #include <stdint.h>
+#include <noise\noise.h>
 
 #define LAT 64
 #define LON 32

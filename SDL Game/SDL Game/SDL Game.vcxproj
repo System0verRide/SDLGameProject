@@ -39,8 +39,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\glm-0.9.4.4\glm;C:\glew-1.9.0\include;C:\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\glew-1.9.0\lib;C:\SDL2\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\libnoise\include;C:\glm-0.9.4.4\glm;C:\glew-1.9.0\include;C:\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\libnoise;C:\glew-1.9.0\lib;C:\SDL2\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +50,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL.lib;SDLmain.lib;opengl32.lib;SDL_image.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;opengl32.lib;SDL_image.lib;glew32.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>

@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include <glm.hpp>
+#include <gtc/constants.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "Atmosphere.h"
 #include "Shader.h"
@@ -21,6 +22,7 @@ private:
 	Atmosphere* theAtmosphere;
 	Shader* atmosphereShader;
 
+	glm::vec3 cameraView;
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewMatrix;
 	glm::mat4 worldMatrix;

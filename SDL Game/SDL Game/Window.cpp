@@ -49,12 +49,11 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
 
-	GLenum blah = glGetError();
-
-	if(major != 4 && minor != 0)
+	if(major <= 4 && minor <= 0)
 	{
 		//we have problems
 	}
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 

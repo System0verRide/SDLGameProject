@@ -46,7 +46,7 @@ void Shader::Validate(GLuint shader, const char* file)
     char buffer[BUFFER_SIZE];
     memset(buffer, 0, BUFFER_SIZE);
     GLsizei length = 0;
-    
+
     glGetShaderInfoLog(shader, BUFFER_SIZE, &length, buffer);
 
     if (length > 0)

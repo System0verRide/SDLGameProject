@@ -86,7 +86,8 @@ void Atmosphere::Init()
 	faces.push_back(Indices(8, 6, 7));
 	faces.push_back(Indices(9, 8, 1));
 
-	for(int i = 0; i < 5; i++)
+
+	for(int i = 0; i < 6; i++)
 	{
 		std::vector<Indices> faces2;
 		faces2.reserve(faces.size());
@@ -109,6 +110,21 @@ void Atmosphere::Init()
 		indices.push_back(faces[i].v1);
 		indices.push_back(faces[i].v2);
 		indices.push_back(faces[i].v3);
+	}
+
+	noise::module::RidgedMulti perlinGen;
+	perlinGen.SetFrequency(1);
+	perlinGen.SetSeed(398942);
+	noise::module::Clamp clampGen;
+	clampGen.SetSourceModule(0, perlinGen);
+	clampGen.SetBounds(0, 1);
+
+	for(int i = 0; i < vertices.size(); i++)
+	{
+		float scaler = clampGen.GetValue(vertices.at(i).x, vertices.at(i).y, vertices.at(i).z);
+		scaler /= 20;
+		glm::vec3 newVertex = vertices.at(i) + scaler;
+		vertices.at(i) = newVertex;
 	}
 
 	for(int i = 0; i < vertices.size(); i++)
