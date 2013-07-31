@@ -51,7 +51,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL.lib;SDLmain.lib;opengl32.lib;SDL_image.lib;glew32.lib;libnoise.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClCompile Include="Atmosphere.cpp" />
     <ClCompile Include="AtmosphereShader.cpp" />
+    <ClCompile Include="ConfigLoader.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Planet.cpp" />
@@ -80,6 +81,7 @@
   <ItemGroup>
     <ClInclude Include="Atmosphere.h" />
     <ClInclude Include="AtmosphereShader.h" />
+    <ClInclude Include="ConfigLoader.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="PostProcess.h" />

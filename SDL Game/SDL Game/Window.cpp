@@ -21,7 +21,7 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	running = true;
 
 	window = nullptr;
-	window = SDL_CreateWindow("Game", 200, 200, 800, 600, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Game", 200, 200, 1920, 1080, SDL_WINDOW_OPENGL|SDL_WINDOW_SHOWN);
 	
 	if(window == nullptr)
 	{
@@ -43,15 +43,15 @@ void Game::Window::Initialize(std::function<void()> OnInit, std::function<void()
 	{
 		const GLubyte* blah = glewGetErrorString(GLEW_VERSION);
 	}
+
 	int major;
 	int minor;
-
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
 
 	if(major <= 4 && minor <= 0)
 	{
-		//we have problems
+		
 	}
 
 	glEnable(GL_DEPTH_TEST);

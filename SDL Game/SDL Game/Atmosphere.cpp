@@ -86,8 +86,9 @@ void Atmosphere::Init()
 	faces.push_back(Indices(8, 6, 7));
 	faces.push_back(Indices(9, 8, 1));
 
+	int iterations = ConfigLoader::ReadInt("iterations");
 
-	for(int i = 0; i < 6; i++)
+	for(int i = 0; i < iterations; i++)
 	{
 		std::vector<Indices> faces2;
 		faces2.reserve(faces.size());
@@ -114,10 +115,13 @@ void Atmosphere::Init()
 
 	noise::module::RidgedMulti perlinGen;
 	perlinGen.SetFrequency(1);
-	perlinGen.SetSeed(398942);
+	int seed = ConfigLoader::ReadInt("seed");
+	perlinGen.SetSeed(seed);
 	noise::module::Clamp clampGen;
 	clampGen.SetSourceModule(0, perlinGen);
 	clampGen.SetBounds(0, 1);
+
+	std::cout << "Number of Vertices: " << vertices.size() << std::endl;
 
 	for(int i = 0; i < vertices.size(); i++)
 	{

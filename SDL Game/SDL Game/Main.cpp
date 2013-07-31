@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include "Framework.h"
+#include "ConfigLoader.h"
 
 
 int main(int argc, char* argv[])
@@ -8,7 +9,9 @@ int main(int argc, char* argv[])
 	{
 		return 1;
 	}
-
+	ConfigLoader::OpenConfig("configuration.config");
+	std::cout << "Using Seed: " << ConfigLoader::ReadString("seed") << std::endl;
+	std::cout << "Number Of Icosphere Iterations: " << ConfigLoader::ReadString("iterations") << std::endl;
 	Framework framework;
 	framework.Start();
 

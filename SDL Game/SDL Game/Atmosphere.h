@@ -3,9 +3,11 @@
 #include <glm.hpp>
 #include <vector>
 #include <map>
+#include <iostream>
 #include <math.h>
 #include <stdint.h>
 #include <noise\noise.h>
+#include "ConfigLoader.h"
 
 #define LAT 64
 #define LON 32

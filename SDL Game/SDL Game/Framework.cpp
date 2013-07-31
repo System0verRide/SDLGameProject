@@ -37,14 +37,12 @@ void Framework::Initialize()
 	theAtmosphere->Init();
 	atmosphereShader = new Shader();
 	atmosphereShader->Init("vert.vert", "frag.frag");
-	projectionMatrix = glm::perspective(60.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+	projectionMatrix = glm::perspective(60.0f, 1920.0f / 1080.0f, 0.1f, 100.0f);
 	viewMatrix = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	cameraView = glm::vec3(2.0f, 2.0f, 2.0f);
 	//Uniform locations
+	glEnable(GL_MULTISAMPLE);
 
-	atmosphereShader->Bind();
-
-	atmosphereShader->Unbind();
 }
 
 void Framework::Start()
@@ -57,7 +55,7 @@ void Framework::Frame()
 {
 	worldMatrix = glm::rotate(worldMatrix, 0.1f, glm::vec3(0, 1, 0));
 	worldViewProjectionMatrix = projectionMatrix * viewMatrix * worldMatrix;
-	glViewport(0, 0, 800, 600);
+	glViewport(0, 0, 1920, 1080);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	atmosphereShader->Bind();
 	worldViewProjectionMatrixLoc = glGetUniformLocation(atmosphereShader->Id(), "worldViewProjectionMatrix");
